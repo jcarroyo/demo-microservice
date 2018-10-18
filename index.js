@@ -8,12 +8,21 @@ const server = restify.createServer({
     version: serverConfiguration.version
 });
 
-const db = require('./src/database')(databaseConfiguration)
-
 server.use(restifyPlugins.jsonBodyParser({ mapParams: true }));
 server.use(restifyPlugins.acceptParser(server.acceptable));
 server.use(restifyPlugins.queryParser({ mapParams: true }));
 server.use(restifyPlugins.fullResponse());
+
+
+const db = require('./src/database')(databaseConfiguration)
+db.poolPromise.then(pool => {
+    console.log('Conectado a MSSQL')
+    return pool
+})
+.catch(err => {
+    console.log('Error con la conexión de la BD', err);
+    process.exit(1);
+});
 
 server.listen(serverConfiguration.port, () => {
     console.log(
@@ -25,3 +34,9 @@ server.listen(serverConfiguration.port, () => {
     )
     require('./src/routes')(db, server)   
 });
+
+server.on('error', (err) => {
+    console.log("Error con el servidor web");
+    console.log(err);
+})
+

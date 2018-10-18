@@ -3,7 +3,7 @@
 module.exports = {
     databaseConfiguration: {
         user: 'sa',
-        password: 'sax',
+        password: process.env.ADRYANDBPASSWORD,
         server: '10.200.69.217',
         database: 'A_Vacaciones',
         pool: {
