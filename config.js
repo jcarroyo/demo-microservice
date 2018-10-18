@@ -10,12 +10,13 @@ module.exports = {
             max: 100,
             min: 0,
             idleTimeoutMillis: 30000
-        }
+        },
+        parseJSON: true
     },
     serverConfiguration: {
         name: 'My Server',
         version: '1.0',
-        port: 8080,
-        env: 'DEV'
+        port: process.env.PORT || 8080,
+        env: process.env.NODE_ENV || 'development'
     }
 };

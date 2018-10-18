@@ -1,11 +1,13 @@
 'use strict'
 
-module.exports = function(ctx){
-    const db = ctx.db,
-          server = ctx.server;
+module.exports = function(db, server){
+
+    const VacationsDA = require('./vacacionesRepo')(db);
 
     server.get('/vacaciones', (req, res, next) => {
-        res.send(200, "OK")
-    });
-            
+        return VacationsDA.getAllVacations()
+            .then(data => {
+                res.send(200, data)
+            });
+    });            
 }

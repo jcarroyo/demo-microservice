@@ -1,6 +1,6 @@
 const   config = require('./config'),
         restify = require('restify'),
-        mssql = require('mssql');
+        restifyPlugins = require('restify-plugins')
 const {databaseConfiguration, serverConfiguration} = config;
 
 const server = restify.createServer({
@@ -8,11 +8,12 @@ const server = restify.createServer({
     version: serverConfiguration.version
 });
 
-/*
-server.use(restify.jsonBodyParser({ mapParams: true }))
-server.use(restify.acceptParser(server.acceptable))
-server.use(restify.queryParser({ mapParams: true }))
-server.use(restify.fullResponse())*/
+const db = require('./src/database')(databaseConfiguration)
+
+server.use(restifyPlugins.jsonBodyParser({ mapParams: true }));
+server.use(restifyPlugins.acceptParser(server.acceptable));
+server.use(restifyPlugins.queryParser({ mapParams: true }));
+server.use(restifyPlugins.fullResponse());
 
 server.listen(serverConfiguration.port, () => {
     console.log(
@@ -21,5 +22,6 @@ server.listen(serverConfiguration.port, () => {
         serverConfiguration.version,
         serverConfiguration.port,
         serverConfiguration.env
-    )    
+    )
+    require('./src/routes')(db, server)   
 });
