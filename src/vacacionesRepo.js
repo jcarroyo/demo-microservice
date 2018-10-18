@@ -7,7 +7,6 @@ module.exports = function(db){
             return result.recordset;
         }
         catch(err){
-            console.log(err);
             throw err;
         }
     }

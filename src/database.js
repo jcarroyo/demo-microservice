@@ -13,7 +13,6 @@ module.exports = function(databaseConfiguration){
             return result;
         }
         catch(err){
-            console.log(err);
             throw err;
         }           
     }
